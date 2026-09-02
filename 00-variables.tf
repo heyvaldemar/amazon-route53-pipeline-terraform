@@ -24,3 +24,16 @@ variable "dynamodb_terraform_state_lock_1_billing_mode" {
   type        = string
   default     = "PAY_PER_REQUEST"
 }
+
+# Hosted Zone Variables
+variable "zone_1_name" {
+  description = "The domain name of the hosted zone to create"
+  type        = string
+  default     = "example.com"
+}
+
+variable "zone_1_apex_ip" {
+  description = "The IPv4 address the apex A record points to (replace with your server IP)"
+  type        = string
+  default     = "127.0.0.1"
+}
