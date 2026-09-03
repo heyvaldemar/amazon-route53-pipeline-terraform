@@ -1,9 +1,9 @@
-# A Route 53 hosted zone — Terraform
+# A Route 53 hosted zone: Terraform
 
 [![Terraform Verification](https://github.com/heyvaldemar/amazon-route53-pipeline-terraform/actions/workflows/terraform-verification.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/amazon-route53-pipeline-terraform/actions/workflows/terraform-verification.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository deploys a **Route 53** hosted zone with its apex A record and a `www` CNAME, plus a self-provisioned Terraform state backend — DNS as code, reviewed in pull requests. Flat, numbered `.tf` files, no modules to chase, every provider locked to an exact build.
+This repository deploys a Route 53 hosted zone with its apex A record and a `www` CNAME, plus a self-provisioned Terraform state backend: DNS as code, reviewed in pull requests. Flat, numbered `.tf` files, no modules to chase, every provider locked to an exact build.
 
 ## What it creates
 
@@ -42,11 +42,11 @@ Values you must change before the first apply:
 | `zone_1_name` | `example.com` | The domain name of the hosted zone to create |
 | `zone_1_apex_ip` | `127.0.0.1` | The IPv4 address the apex A record points to (replace with your server IP) |
 
-No credentials are needed beyond your AWS CLI session; generated key material (SSH keys) is created by Terraform and lands in state — treat the state bucket as sensitive, which the KMS-encrypted, versioned, access-blocked bucket this configuration creates already does.
+No credentials are needed beyond your AWS CLI session; generated key material (SSH keys) is created by Terraform and lands in state. Treat the state bucket as sensitive, which the KMS-encrypted, versioned, access-blocked bucket this configuration creates already does.
 
 ### State backend: bootstrap, then switch
 
-The first `apply` runs with local state and **creates** the S3 bucket, DynamoDB lock table and KMS key that will hold the state from then on. Once they exist, uncomment the `backend "s3"` block in `01-providers.tf`, fill in the bucket and table names from the outputs, and run `terraform init -migrate-state`. From that point every plan locks against DynamoDB and the state is versioned and encrypted.
+The first `apply` runs with local state and creates the S3 bucket, DynamoDB lock table and KMS key that will hold the state from then on. Once they exist, uncomment the `backend "s3"` block in `01-providers.tf`, fill in the bucket and table names from the outputs, and run `terraform init -migrate-state`. From that point every plan locks against DynamoDB and the state is versioned and encrypted.
 
 ## Supply chain trust
 
@@ -59,7 +59,7 @@ See [`SECURITY.md`](SECURITY.md) for the disclosure policy.
 ## Production checklist
 
 - [ ] **Move state to the remote backend** right after the bootstrap apply (see above). Local state on a laptop is how estates get lost.
-- [ ] **Review the region and instance sizes** in `00-variables.tf` — defaults are sized to boot, not to serve your load.
+- [ ] **Review the region and instance sizes** in `00-variables.tf`. Defaults are sized to boot, not to serve your load.
 - [ ] **Run `terraform plan` in CI on pull requests.** `.github/workflows/02-terraform-plan-apply.yml.example` and `.gitlab-ci.yml.example` show the shape; wire them to your AWS account with OIDC federation rather than static keys.
 - [ ] **Watch for drift.** `00-terraform-drift-detection.yml.example` runs a nightly plan and fails when the estate no longer matches the code.
 
@@ -67,7 +67,7 @@ See [`SECURITY.md`](SECURITY.md) for the disclosure policy.
 
 The [Terraform Verification](https://github.com/heyvaldemar/amazon-route53-pipeline-terraform/actions/workflows/terraform-verification.yml?query=branch%3Amain) workflow runs on every push, pull request, and weekly: `terraform fmt -check`, `terraform init -lockfile=readonly`, `terraform validate`, `tflint`, and actionlint on the workflow itself.
 
-What CI does **not** do is `apply`: this repository has no AWS account of its own, so the guarantee is that the configuration is well-formed and its providers are exactly the ones tested. Run the plan/apply pipeline examples against your own account for the rest.
+What CI does not do is `apply`: this repository has no AWS account of its own, so the guarantee is that the configuration is well-formed and its providers are exactly the ones tested. Run the plan/apply pipeline examples against your own account for the rest.
 
 ---
 
