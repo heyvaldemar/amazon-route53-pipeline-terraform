@@ -1,6 +1,7 @@
 # A Route 53 hosted zone: Terraform
 
 [![Terraform Verification](https://github.com/heyvaldemar/amazon-route53-pipeline-terraform/actions/workflows/terraform-verification.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/amazon-route53-pipeline-terraform/actions/workflows/terraform-verification.yml)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14908/badge)](https://www.bestpractices.dev/projects/14908)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This repository deploys a Route 53 hosted zone with its apex A record and a `www` CNAME, plus a self-provisioned Terraform state backend: DNS as code, reviewed in pull requests. Flat, numbered `.tf` files, no modules to chase, every provider locked to an exact build.
